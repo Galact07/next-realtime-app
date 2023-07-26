@@ -5,7 +5,7 @@ import GoogleProvider from "next-auth/providers/google";
 import { User } from '@/interfaces/User';
 
 export const authOptions:NextAuthOptions = {
-    adapter:UpstashRedisAdapter(db),
+    adapter:UpstashRedisAdapter(db), //adapter is used to store session data in redis and connect to data base 
     session:{
         strategy:'jwt'
     },
@@ -15,7 +15,7 @@ export const authOptions:NextAuthOptions = {
     providers: [
         GoogleProvider({
           clientId: process.env.GOOGLE_CLIENT_ID!,
-          clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+          clientSecret: process.env.GOOGLE_SECRET!,
         }),
     ],
     callbacks:{
