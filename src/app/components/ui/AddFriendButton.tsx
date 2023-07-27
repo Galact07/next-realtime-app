@@ -2,7 +2,7 @@
 
 import { FC, useState } from 'react'
 import { addFriend } from '@/lib/validations/addFriend'
-import { ZodError, ZodObject, ZodString, ZodTypeAny, z } from 'zod'
+import { ZodError, z } from 'zod'
 import {AxiosError} from 'axios'
 import axios from 'axios'
 import {useForm} from 'react-hook-form'
@@ -29,12 +29,10 @@ const addFriendValidate = async(email:string)=>{
     const validateEmail= addFriend.parse({
       email:email
     })
-
-    if(validateEmail){
-      await axios.post('/api/friend/add',{
+      await axios.post('/api/friends/addFriend',{
         email:validateEmail
       });
-    }
+  
     setShowSuccess(true)
   }catch(error:any){
     if(error instanceof ZodError){
@@ -49,8 +47,8 @@ const addFriendValidate = async(email:string)=>{
   }
 }
 
-const handleSubmitForm = async(data:FormData)=>{
-  await addFriendValidate(data.email)
+const handleSubmitForm = (data:FormData)=>{
+   addFriendValidate(data.email)
   
 }
 
