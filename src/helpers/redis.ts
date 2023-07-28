@@ -1,4 +1,4 @@
-type Commands =  'get' | 'sismember' | 'simember' | 'zrange';
+type Commands =  'get' | 'sismember' | 'smembers' | 'zrange';
 const upstashRedisRestUrl = process.env.UPSTASH_REDIS_REST_URL;
 const authToken = process.env.UPSTASH_REDIS_REST_TOKEN;
 export async function fetchRedis(
