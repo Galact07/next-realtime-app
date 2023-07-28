@@ -29,7 +29,7 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement>, Va
   isLoading?:boolean
 }
 
-const Button: FC<ButtonProps> = ({className,children,isLoading,variant,size,...props}) => {
+const Button = ({className,children,isLoading,variant,size,...props}:ButtonProps) => {
   return (
     <button
     className={cn(buttonVariants({variant,size,className}))} disabled={isLoading} {...props}>

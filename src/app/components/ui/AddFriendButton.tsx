@@ -8,6 +8,7 @@ import axios from 'axios'
 import {useForm} from 'react-hook-form'
 import {zodResolver} from "@hookform/resolvers/zod"
 import Button from './Button'
+import { toast } from 'react-hot-toast'
 
 
 interface AddFriendButtonProps {
@@ -34,6 +35,7 @@ const addFriendValidate = async(email:string)=>{
       });
   
     setShowSuccess(true)
+    toast.success("Friend added!")
   }catch(error:any){
     if(error instanceof ZodError){
       setError("email",{message:error.message})
@@ -43,6 +45,7 @@ const addFriendValidate = async(email:string)=>{
       setError("email",{message:error.response?.data})
       return
     }
+    toast.error("Something went wrong")
     setError("email",{message:"Something went wrong"})
   }
 }
