@@ -2,6 +2,7 @@
     "editor.acceptSuggestionOnEnter": "on",
     "cSpell.words": [
         "clsx",
+        "sismember",
         "smembers"
     ]
 }

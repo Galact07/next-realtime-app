@@ -10,6 +10,8 @@ import SignOutButton from '@/app/components/ui/SignOutButton'
 import FriendRequest from '@/app/components/FriendRequest'
 import { fetchRedis } from '@/helpers/redis'
 import { User } from '@/interfaces/User'
+import { getFriendsId } from '@/helpers/getFriendsId'
+import SidebarChatList from '@/app/components/SidebarChatList'
 
 interface LayoutProps {
   children: ReactNode
@@ -32,7 +34,6 @@ const sidebarOptions:SidebarOptions[]=[
 ]
 
 
-
 const Layout =async ({children}:LayoutProps) => {
   const session = await getServerSession(authOptions);
   if(!session){
@@ -45,7 +46,8 @@ const Layout =async ({children}:LayoutProps) => {
   ) as User[]
 ).length
 
-console.log(friendRequest);
+const friends = await getFriendsId(session.user.id) as User[];
+
 
   return (
     <div className='w-full flex h-screen'>
@@ -53,9 +55,16 @@ console.log(friendRequest);
       <Link href='/dashboard' className='flex h-16 shrink-0 items-center'>
           <Icons.Logo className='h-8 w-auto text-indigo-600' />
         </Link>
-        Your DashBoard!
+        {friends.length > 0 ? (
+          <div className='text-xs font-semibold leading-6 text-gray-400'>
+            Your chats
+          </div>
+        ) : null}
         <nav className='flex flex-1 flex-col'>
           <ul role='list' className='flex flex-1 flex-col gap-y-7'>
+          <li>
+              <SidebarChatList sessionId={session.user.id} friends={friends} />
+            </li>
             <li>
               <div className='text-xs font-semibold leading-6 text-gray-400'>
                 Overview
@@ -107,7 +116,7 @@ console.log(friendRequest);
           </ul>
         </nav>
       </div>
-      <aside className='max-h-screen container py-16 md:py-12 px-5 w-full bg-slate-200/80'>
+      <aside className='max-h-screen container py-16 md:py-12 w-full bg-slate-200/80'>
         {children}
       </aside>
     </div>
