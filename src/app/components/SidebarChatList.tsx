@@ -1,6 +1,5 @@
 'use client'
 
-import { Message } from '@/interfaces/Message'
 import { User } from '@/interfaces/User'
 import { chatPath } from '@/lib/util'
 import { usePathname, useRouter } from 'next/navigation'
@@ -13,23 +12,25 @@ interface SidebarChatListProps {
 
 const SidebarChatList: FC<SidebarChatListProps> = ({ friends, sessionId }) => {
     const router = useRouter();
-    const pathName= usePathname() as string;
+    const pathName= usePathname();
     const[unSeenMessages,setUnSeenMessages]=useState<Message[]>([]);
 
     useEffect(()=>{
-       if(pathName.includes('chat')){
-        setUnSeenMessages((prev)=>(
-            prev.filter((message)=> !pathName.includes(message.senderId) )
-        )
+       if(pathName?.includes('chat')){
+        setUnSeenMessages((prev)=>{
+            return prev.filter((message)=> !pathName.includes(message.senderId) )
+        }
         )
        }
     },[pathName])
 
 
   return (
-    <ul>
-        {friends.sort().map((friend:User)=>{
-            const unseenFriendMessagesCount=(unSeenMessages.filter((message)=>message.senderId===friend.id)).length;
+    <ul role='list' className='max-h-[25rem] overflow-y-auto -mx-2 space-y-1'>
+        {friends.sort().map((friend)=>{
+            const unseenFriendMessagesCount = unSeenMessages.filter((unseenMsg) => {
+              return unseenMsg.senderId === friend.id
+            }).length
             return(
                 <li key={friend.id}>
             <a

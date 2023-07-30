@@ -1,12 +1,14 @@
 import { fetchRedis } from '@/helpers/redis';
 import { Chats } from '@/interfaces/Chat';
-import { Message } from '@/interfaces/Message';
 import { User } from '@/interfaces/User';
 import { authOptions } from '@/lib/authOptions';
-import { messageArrayValidator } from '@/lib/validations/message';
+import { messageArrayValidator,Message } from '@/lib/validations/message';
 import { getServerSession } from 'next-auth';
 import { notFound } from 'next/navigation';
 import Image from 'next/image'
+import Messages from '@/app/components/Message';
+import ChatInput from '@/app/components/ChatInput';
+
 
 interface ChatPageProps {
     params: {
@@ -16,20 +18,22 @@ interface ChatPageProps {
 
 const getAllMessages=async(chatId:string)=>{
     try{
-        const getMessages=( await fetchRedis(
-            'zrange',
-            `chat:${chatId}:messages`,
-            0,
-            -1,
-        )) as string[]
+        const getMessages:string[]=( await fetchRedis(
+          'zrange',
+          `chat:${chatId}:messages`,
+          0,
+          -1
+        ))
 
-        const parseMessages = getMessages.map((message)=>JSON.parse(message)) as Message[];
+        const parseMessages = getMessages.map((message)=>JSON.parse(message) as Message) ;
 
         const reverseMessages = parseMessages.reverse();
 
-        const messages=  messageArrayValidator.parse(reverseMessages); 
+        const messages=  messageArrayValidator.parse(reverseMessages);
+        console.log(messages);
+        return messages 
     }catch(err){
-        return new Response("Error"+err,{status:404});
+        notFound();
     }
 }
 
@@ -57,9 +61,10 @@ const Chat= async({params}:ChatPageProps) => {
 
 
     const getMessages = await getAllMessages(chatId);
+    console.log(getMessages);
 
   return(
-    <div className='flex-1 justify-between flex flex-col h-full max-h-[calc(100vh-2rem)]'>
+    <div className='flex-1 justify-between flex flex-col h-full max-h-[calc(100vh-6rem)]'>
       <div className='flex sm:items-center justify-between py-3 border-b-2 border-gray-200'>
         <div className='relative flex items-center space-x-4'>
           <div className='relative'>
@@ -84,7 +89,10 @@ const Chat= async({params}:ChatPageProps) => {
             <span className='text-sm text-gray-600'>{chatPartner.email}</span>
           </div>
         </div>
+        
       </div>
+      <Messages initialMessages={getMessages} sessionId={session.user.id} sessionImg={session.user.image} friend={chatPartner}/>
+        <ChatInput partner={chatPartner} chatId={chatId}/>
     </div>
   )
   }

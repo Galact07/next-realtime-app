@@ -1,10 +1,14 @@
 "use client"
 
-import { FC,useState } from 'react'
+import { FC,useEffect,useState } from 'react'
 import FriendRequest from './FriendRequest';
 import { Check, UserPlus, X } from 'lucide-react';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
+import { pusherClient } from '@/lib/pusher'
+import { pusherKey } from '@/lib/util';
+import { toast } from 'react-hot-toast';
+
 
 interface ShowFriendRequestsProps {
   incomingFriendRequests:IncomingRequest[];
@@ -42,6 +46,22 @@ const ShowFriendRequests: FC<ShowFriendRequestsProps> = ({incomingFriendRequests
       return new Response(JSON.stringify({error:error.message}),{status:500});
     }
 }
+
+useEffect(()=>{
+  pusherClient.subscribe(pusherKey(`user:${sessionId}:incoming_friend_requests`));
+
+  const friendRequestHandler=()=>{
+    toast.success('New friend request',{icon:'👋'});
+    console.log('new friend request'); 
+  }
+
+  pusherClient.bind('incoming_friend_requests',friendRequestHandler);
+
+  return ()=> {
+    pusherClient.unsubscribe(pusherKey(`user:${sessionId}:incoming_friend_requests`))
+    pusherClient.unbind('incoming_friend_requests',friendRequestHandler);
+  }
+},[])
 
   return (
     <>

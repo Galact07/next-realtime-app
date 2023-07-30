@@ -46,7 +46,7 @@ const Layout =async ({children}:LayoutProps) => {
   ) as User[]
 ).length
 
-const friends = await getFriendsId(session.user.id) as User[];
+const friends = await getFriendsId(session.user.id);
 
 
   return (
@@ -116,7 +116,7 @@ const friends = await getFriendsId(session.user.id) as User[];
           </ul>
         </nav>
       </div>
-      <aside className='max-h-screen container py-16 md:py-12 w-full bg-slate-200/80'>
+      <aside className='max-h-screen container py-16 md:py-12 px-4 w-full bg-slate-200/80'>
         {children}
       </aside>
     </div>

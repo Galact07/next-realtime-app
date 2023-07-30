@@ -7,5 +7,10 @@ export function cn(...inputs:ClassValue[]){
 }
 
 export function chatPath(user1:string, user2:string){
-    return `${user1}--${user2}`
+    const sortIds=[user1,user2].sort();
+    return `${sortIds[0]}--${sortIds[1]}`
+}
+
+export function pusherKey(key:string){
+    return key.replace(/_/g,'__')
 }

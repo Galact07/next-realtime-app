@@ -1,8 +1,8 @@
-import { User } from "next-auth";
+
+import { User } from "@/interfaces/User"
 import { fetchRedis } from "./redis"
 
 export async function getFriendsId(userId: string) {
-  try{
     const getFriendsIds=(await fetchRedis(
         'smembers',
         `user:${userId}:friends`
@@ -17,7 +17,4 @@ export async function getFriendsId(userId: string) {
       )
     
       return friends
-  }catch(error:any){
-    return new Response(error.message, { status: 500 })
-  }
 }
