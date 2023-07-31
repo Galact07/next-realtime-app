@@ -12,19 +12,21 @@ import { fetchRedis } from '@/helpers/redis'
 import { User } from '@/interfaces/User'
 import { getFriendsId } from '@/helpers/getFriendsId'
 import SidebarChatList from '@/app/components/SidebarChatList'
+import MobileLayout from '@/app/components/MobileLayout'
+import { SidebarOptions } from '@/interfaces/SidebarOptions'
 
 interface LayoutProps {
   children: ReactNode
 }
 
-interface SidebarOptions{
-  id:number,
-  name:string,
-  Logo:Logos,
-  path:string
-}
+// export interface SidebarOptions{
+//   id:number,
+//   name:string,
+//   Logo:Logos,
+//   path:string
+// }
 
-const sidebarOptions:SidebarOptions[]=[
+export const sidebarOptions:SidebarOptions[]=[
   {
     id:1,
     name:"Add Friend",
@@ -51,6 +53,9 @@ const friends = await getFriendsId(session.user.id);
 
   return (
     <div className='w-full flex h-screen'>
+      <div className="md:hidden">
+        <MobileLayout friends={friends} session={session} unseenRequestCount={friendRequest}/>
+      </div>
       <div className='hidden md:flex h-full w-full max-w-xs grow flex-col gap-y-5 overflow-y-auto border-r border-gray-200 bg-white px-6'>
       <Link href='/dashboard' className='flex h-16 shrink-0 items-center'>
           <Icons.Logo className='h-8 w-auto text-indigo-600' />

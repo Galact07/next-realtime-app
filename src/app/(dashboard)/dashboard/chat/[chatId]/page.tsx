@@ -30,7 +30,6 @@ const getAllMessages=async(chatId:string)=>{
         const reverseMessages = parseMessages.reverse();
 
         const messages=  messageArrayValidator.parse(reverseMessages);
-        console.log(messages);
         return messages 
     }catch(err){
         notFound();
@@ -38,7 +37,7 @@ const getAllMessages=async(chatId:string)=>{
 }
 
 const Chat= async({params}:ChatPageProps) => {
-    const {chatId}= params;
+    const chatId= params.chatId;
     const session = await getServerSession(authOptions);
     if(!session){
         return notFound();
@@ -61,7 +60,6 @@ const Chat= async({params}:ChatPageProps) => {
 
 
     const getMessages = await getAllMessages(chatId);
-    console.log(getMessages);
 
   return(
     <div className='flex-1 justify-between flex flex-col h-full max-h-[calc(100vh-6rem)]'>
