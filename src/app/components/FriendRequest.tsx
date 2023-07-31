@@ -14,6 +14,7 @@ interface FriendRequestProps {
 
 const FriendRequest: FC<FriendRequestProps> = ({sessionId,initialFriendRequests}) => {
   const [friendRequests,setFriendRequests]=useState<number>(initialFriendRequests);
+  pusherClient.subscribe(pusherKey(`user:${sessionId}:friend`));
 
   useEffect(()=>{
     pusherClient.subscribe(pusherKey(`user:${sessionId}:incoming_friend_requests`));
@@ -22,12 +23,19 @@ const FriendRequest: FC<FriendRequestProps> = ({sessionId,initialFriendRequests}
      setFriendRequests(friendRequests=>friendRequests+1);
       toast.success('New friend request',{icon:'👋'});
     }
+
+    const requestCount=()=>{
+      setFriendRequests(friendRequests=>friendRequests-1);
+    }
   
     pusherClient.bind('incoming_friend_requests',friendRequestHandler);
+    pusherClient.bind('new_friend',requestCount);
   
     return ()=> {
       pusherClient.unsubscribe(pusherKey(`user:${sessionId}:incoming_friend_requests`))
       pusherClient.unbind('incoming_friend_requests',friendRequestHandler);
+      pusherClient.subscribe(pusherKey(`user:${sessionId}:friend`));
+      pusherClient.bind('new_friend',requestCount);
     }
   },)
 
