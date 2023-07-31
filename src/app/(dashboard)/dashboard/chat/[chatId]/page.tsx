@@ -91,7 +91,7 @@ const Chat= async({params}:ChatPageProps) => {
         </div>
         
       </div>
-      <Messages initialMessages={getMessages} sessionId={session.user.id} sessionImg={session.user.image} friend={chatPartner}/>
+      <Messages initialMessages={getMessages} chatId={chatId} sessionId={session.user.id} sessionImg={session.user.image} friend={chatPartner}/>
         <ChatInput partner={chatPartner} chatId={chatId}/>
     </div>
   )

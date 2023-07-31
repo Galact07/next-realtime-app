@@ -7,6 +7,8 @@ import { nanoid } from "nanoid";
 import { messageArrayValidator, messageSchema } from "@/lib/validations/message";
 import {Message} from "@/lib/validations/message";
 import { User } from "@/interfaces/User";
+import { pusherServer } from "@/lib/pusher";
+import { pusherKey } from "@/lib/util";
 
 export async function POST(request:Request){
     try{
@@ -44,6 +46,22 @@ export async function POST(request:Request){
        } 
 
        const messageValid=  messageSchema.parse(messageData);
+
+       await pusherServer.trigger(
+        pusherKey(`chat:${chatId}:messages`),
+        'incoming_friend_messages',
+       messageValid
+      )
+
+     await pusherServer.trigger(
+        pusherKey(`user:${friendId}:newmessage`),
+        'new_message',
+        {
+            ...messageValid,
+            senderImg:sender.image,
+            senderName:sender.name
+        }
+      )
 
        await db.zadd(`chat:${chatId}:messages`,{
         score: Date.now(),

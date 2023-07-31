@@ -1,23 +1,43 @@
 "use client"
-import { cn } from '@/lib/util'
+import { cn, pusherKey } from '@/lib/util'
 import { Message } from '@/lib/validations/message'
 import { format } from 'date-fns'
-import { FC, useRef, useState } from 'react'
+import { FC, useEffect, useRef, useState } from 'react'
 import Image from 'next/image'
 import { User } from '@/interfaces/User'
+import { pusherClient } from '@/lib/pusher'
+import toast from 'react-hot-toast'
 
 interface MessageProps {
   initialMessages: Message[],
   sessionId:string,
+  chatId:string,
   sessionImg:string | null | undefined,
   friend:User
 }
 
-const Messages: FC<MessageProps> = ({initialMessages,sessionId,sessionImg,friend}) => {
+const Messages: FC<MessageProps> = ({initialMessages,sessionId,sessionImg,friend,chatId}) => {
 
     const [messages,setMessages] = useState<Message[]>(initialMessages)
 
     const scrollDownRef = useRef<HTMLDivElement | null >(null)
+
+
+    useEffect(()=>{
+      pusherClient.subscribe(pusherKey(`chat:${chatId}:messages`));
+    
+      const messageHandler=(message:Message)=>{
+        setMessages(messages=>[message,...messages]);
+      }
+    
+      pusherClient.bind('incoming_friend_messages',messageHandler);
+    
+      return ()=> {
+        pusherClient.unsubscribe(pusherKey(`chat:${chatId}:messages`))
+        pusherClient.unbind('incoming_friend_messages',messageHandler);
+      }
+    },)
+    
 
   return (
     <div id='messageSection'

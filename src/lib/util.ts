@@ -12,5 +12,5 @@ export function chatPath(user1:string, user2:string){
 }
 
 export function pusherKey(key:string){
-    return key.replace(/_/g,'__')
+    return key.replace(/:/g,'__')
 }

@@ -1,15 +1,36 @@
 "use client"
+import { pusherClient } from '@/lib/pusher'
+import { pusherKey } from '@/lib/util'
 import { User } from 'lucide-react'
 import Link from 'next/link'
-import { FC, useState } from 'react'
+import { FC, useEffect, useState } from 'react'
+import toast from 'react-hot-toast'
 
 interface FriendRequestProps {
   sessionId:string,
   initialFriendRequests:number
 }
 
+
 const FriendRequest: FC<FriendRequestProps> = ({sessionId,initialFriendRequests}) => {
   const [friendRequests,setFriendRequests]=useState<number>(initialFriendRequests);
+
+  useEffect(()=>{
+    pusherClient.subscribe(pusherKey(`user:${sessionId}:incoming_friend_requests`));
+  
+    const friendRequestHandler=({senderId,senderEmail}:IncomingRequest)=>{
+     setFriendRequests(friendRequests=>friendRequests+1);
+      toast.success('New friend request',{icon:'👋'});
+    }
+  
+    pusherClient.bind('incoming_friend_requests',friendRequestHandler);
+  
+    return ()=> {
+      pusherClient.unsubscribe(pusherKey(`user:${sessionId}:incoming_friend_requests`))
+      pusherClient.unbind('incoming_friend_requests',friendRequestHandler);
+    }
+  },)
+
   return(
     <Link
     href='/dashboard/requests'

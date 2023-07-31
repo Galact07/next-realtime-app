@@ -35,7 +35,6 @@ const ShowFriendRequests: FC<ShowFriendRequestsProps> = ({incomingFriendRequests
 
   const denyFriend = async(senderId:string)=>{
     try{
-      console.log(senderId +": sessionId");
       await axios.post('/api/friends/denyFriend',{id:senderId});
       setFriendRequests((prev) =>
       prev.filter((request) => request.senderId !== senderId)
@@ -50,9 +49,12 @@ const ShowFriendRequests: FC<ShowFriendRequestsProps> = ({incomingFriendRequests
 useEffect(()=>{
   pusherClient.subscribe(pusherKey(`user:${sessionId}:incoming_friend_requests`));
 
-  const friendRequestHandler=()=>{
+  const friendRequestHandler=({senderId,senderEmail}:IncomingRequest)=>{
+    setFriendRequests(friendRequests=>[...friendRequests,{
+      senderId,
+      senderEmail
+    }]);
     toast.success('New friend request',{icon:'👋'});
-    console.log('new friend request'); 
   }
 
   pusherClient.bind('incoming_friend_requests',friendRequestHandler);
@@ -61,7 +63,7 @@ useEffect(()=>{
     pusherClient.unsubscribe(pusherKey(`user:${sessionId}:incoming_friend_requests`))
     pusherClient.unbind('incoming_friend_requests',friendRequestHandler);
   }
-},[])
+},)
 
   return (
     <>

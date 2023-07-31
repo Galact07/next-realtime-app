@@ -80,6 +80,6 @@ export async function POST(request:Request)  {
             return new Response('Invalid request payload', { status: 422 })
           }
       
-          return new Response('Invalid request', { status: 400 })
+          return new Response('Invalid request'+error.message, { status: 400 })
     }
 }
