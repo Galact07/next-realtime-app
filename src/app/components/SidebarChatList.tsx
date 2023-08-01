@@ -73,7 +73,6 @@ const SidebarChatList: FC<SidebarChatListProps> = ({ friends, sessionId }) => {
   return (
     <ul role='list' className='max-h-[25rem] overflow-y-auto -mx-2 space-y-1'>
         {currentChats.sort().map((friend)=>{
-          console.log(sessionId,friend.id)
             const unseenFriendMessagesCount = unSeenMessages.filter((unseenMsg) => {
               return unseenMsg.senderId === friend.id
             }).length

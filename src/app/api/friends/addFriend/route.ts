@@ -13,14 +13,12 @@ export async function POST(request:Request)  {
     try{
         const reqBody = await request.json();
         const {email:emailToAddFriend}= addFriend.parse(reqBody.email);
-        console.log(emailToAddFriend);
 
 
         const idToAdd = (await fetchRedis(
             'get',
             `user:email:${emailToAddFriend}`
           )) as string
-      console.log(idToAdd);   
           if (!idToAdd) {
             return new Response(`This person does not exist.${emailToAddFriend}`, { status: 400 })
           }

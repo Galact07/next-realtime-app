@@ -1,16 +1,9 @@
 import { fetchRedis } from '@/helpers/redis';
-import { Chats } from '@/interfaces/Chat';
-import { User } from '@/interfaces/User';
-import { authOptions } from '@/lib/authOptions';
-import { messageArrayValidator,Message } from '@/lib/validations/message';
-import { getServerSession } from 'next-auth';
-import { notFound } from 'next/navigation';
-import Image from 'next/image'
-import Messages from '@/app/components/Message';
-import ChatInput from '@/app/components/ChatInput';
-import Skeleton from 'react-loading-skeleton'
-import 'react-loading-skeleton/dist/skeleton.css'
 
+import { messageArrayValidator,Message } from '@/lib/validations/message';
+
+import { notFound } from 'next/navigation';
+import Skeleton from 'react-loading-skeleton';
 
 
 interface ChatPageProps {
@@ -19,26 +12,6 @@ interface ChatPageProps {
       }
 }
 
-const getAllMessages=async(chatId:string)=>{
-    try{
-        const getMessages:string[]=( await fetchRedis(
-          'zrange',
-          `chat:${chatId}:messages`,
-          0,
-          -1
-        ))
-
-        const parseMessages = getMessages.map((message)=>JSON.parse(message) as Message) ;
-
-        const reverseMessages = parseMessages.reverse();
-
-        const messages=  messageArrayValidator.parse(reverseMessages);
-        console.log(messages);
-        return messages 
-    }catch(err){
-        notFound();
-    }
-}
 
 const Chat= async({params}:ChatPageProps) => {
   return(

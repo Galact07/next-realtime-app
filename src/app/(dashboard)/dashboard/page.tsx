@@ -6,14 +6,10 @@ import { ChevronRight } from 'lucide-react';
 import { getServerSession } from 'next-auth';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { FC } from 'react'
 import Image from 'next/image';
 
-interface pageProps {
-  
-}
 
-const DashBoard: FC<pageProps> = async({}) => {
+const DashBoard = async({}) => {
 
   const session = await getServerSession(authOptions);
   if(!session){
@@ -21,24 +17,26 @@ const DashBoard: FC<pageProps> = async({}) => {
   }
 
   const friends= await getFriendsId(session.user.id);
+  
 
-  const lastMessage =await Promise.all(
-    friends.map(async(friend)=>{
-      const [lastMessage]= (await fetchRedis(
+  const lastMessage = await Promise.all(
+    friends.map(async (friend) => {
+      const [lastMessageRaw] = (await fetchRedis(
         'zrange',
-        `chat:${chatPath(session.user.id,friend.id)}:messages`,
-        -1,-1
+        `chat:${chatPath(session.user.id, friend.id)}:messages`,
+        -1,
+        -1
       )) as string[]
 
-      const lastMsgParsed = await JSON.parse(lastMessage)
-      return{
+      const lastMessage = JSON.parse(lastMessageRaw) as Message
+
+      return {
         ...friend,
-        lastMessage:lastMsgParsed
+        lastMessage,
       }
-    }) 
+    })
   )
 
-  console.log(lastMessage);
 
 
   return <div className='container py-12 overflow-y-auto'>
