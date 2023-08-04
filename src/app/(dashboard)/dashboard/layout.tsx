@@ -14,6 +14,7 @@ import { getFriendsId } from '@/helpers/getFriendsId'
 import SidebarChatList from '@/app/components/SidebarChatList'
 import MobileLayout from '@/app/components/MobileLayout'
 import { SidebarOptions } from '@/interfaces/SidebarOptions'
+import BotChats from '@/app/components/ChatBot/BotChats'
 
 interface LayoutProps {
   children: ReactNode
@@ -52,11 +53,11 @@ const friends = await getFriendsId(session.user.id);
 
 
   return (
-    <div className='w-full flex h-screen'>
+    <div className='w-full flex h-screen overflow-y-auto'>
       <div className="md:hidden">
         <MobileLayout friends={friends} session={session} unseenRequestCount={friendRequest}/>
       </div>
-      <div className='hidden md:flex h-full w-full max-w-xs grow flex-col gap-y-5 overflow-y-auto border-r border-gray-200 bg-white px-6'>
+      <div className='hidden md:flex h-full w-full max-w-[400px] grow flex-col gap-y-5 overflow-y-auto border-r border-gray-200 bg-white px-6'>
       <Link href='/dashboard' className='flex h-16 shrink-0 items-center'>
           <Icons.Logo className='h-8 w-auto text-indigo-600' />
         </Link>
@@ -95,6 +96,7 @@ const friends = await getFriendsId(session.user.id);
                 <FriendRequest sessionId={session.user.id} initialFriendRequests={friendRequest}/>
               </ul>
             </li>
+            
             <li className='-mx-6 mt-auto flex items-center'>
               <div className='flex flex-1 items-center gap-x-4 px-6 py-3 text-sm font-semibold leading-6 text-gray-900'>
                 <div className='relative h-8 w-8 bg-gray-50'>
@@ -121,7 +123,8 @@ const friends = await getFriendsId(session.user.id);
           </ul>
         </nav>
       </div>
-      <aside className='max-h-screen container py-16 md:py-12 px-4 w-full bg-slate-200/80'>
+      <aside className='max-h-screen container py-16 md:py-12 w-full bg-slate-200/80'>
+      <BotChats/>
         {children}
       </aside>
     </div>
