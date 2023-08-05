@@ -57,7 +57,7 @@ const friends = await getFriendsId(session.user.id);
       <div className="md:hidden">
         <MobileLayout friends={friends} session={session} unseenRequestCount={friendRequest}/>
       </div>
-      <div className='hidden md:flex h-full w-full max-w-[400px] grow flex-col gap-y-5 overflow-y-auto border-r border-gray-200 bg-white px-6'>
+      <div className='hidden md:flex h-full w-full max-w-xs grow flex-col gap-y-5 overflow-y-auto border-r border-gray-200 bg-white px-6'>
       <Link href='/dashboard' className='flex h-16 shrink-0 items-center'>
           <Icons.Logo className='h-8 w-auto text-indigo-600' />
         </Link>
