@@ -9,7 +9,7 @@ interface pageProps {
 const AddFriend: FC<pageProps> = ({}) => {
   return (
     <main className="pt-8">
-        <h1 className="font-bold text-5xl mb-8">
+        <h1 className="font-bold text-yellow-500 text-5xl mb-8">
             Add a Friend
         </h1>
         <AddFriendButton/>
