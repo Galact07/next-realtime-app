@@ -46,7 +46,7 @@ const FriendRequest: FC<FriendRequestProps> = ({sessionId,initialFriendRequests}
     <div className='text-yellow-500 border-yellow-500 group-hover:border-yellow-800 group-hover:text-yellow-500 flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border text-[0.625rem] font-medium bg-white'>
       <User className='h-4 w-4' />
     </div>
-    <p className='truncate'>Friend requests Received</p>
+    <p className='truncate'>Friend Requests</p>
     {friendRequests>0&&<span className='rounded-full w-5 h-5 text-xs flex justify-center items-center text-white bg-yellow-500'>{friendRequests}</span>
     }
   </Link>

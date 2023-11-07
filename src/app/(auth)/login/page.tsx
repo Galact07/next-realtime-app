@@ -14,11 +14,35 @@ interface pageProps {}
 
 const Login: FC<pageProps> = ({}) => {
     const [isLoading,setIsLoading] =useState<boolean>(false);
+    const [isLoadingFace,setIsLoadingFace] =useState<boolean>(false);
+    const [isLoadingTweet,setIsLoadingTweet] =useState<boolean>(false);
 
     const loginWithGoogle= async()=>{
         try{
             setIsLoading(true);
             await signIn("google");
+            toast.success("Logged in successfully");
+        }catch(err:any){
+            toast.error("Something went wrong");
+        }finally{
+            setIsLoading(false);
+        }
+    }
+    const loginWithFacebook= async()=>{
+        try{
+            setIsLoadingFace(true);
+            await signIn("facebook");
+            toast.success("Logged in successfully");
+        }catch(err:any){
+            toast.error("Something went wrong");
+        }finally{
+            setIsLoading(false);
+        }
+    }
+    const loginWithTwitter= async()=>{
+        try{
+            setIsLoadingTweet(true);
+            await signIn("twitter");
             toast.success("Logged in successfully");
         }catch(err:any){
             toast.error("Something went wrong");
@@ -59,10 +83,17 @@ const Login: FC<pageProps> = ({}) => {
                 </Button> 
                 <Button
                     className='max-w-sm mx-auto w-full'
-                    onClick={loginWithGoogle}
+                    onClick={loginWithFacebook}
                     type="submit"
-                    isLoading={isLoading}
-                    >Github
+                    isLoading={isLoadingFace}
+                    >Facebook
+                </Button> 
+                <Button
+                    className='max-w-sm mx-auto w-full'
+                    onClick={loginWithTwitter}
+                    type="submit"
+                    isLoading={isLoadingTweet}
+                    >Twitter
                 </Button> 
                 </div>
         </div>
