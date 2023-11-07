@@ -60,7 +60,7 @@ const handleSubmitForm = (data:FormData)=>{
     <label 
     htmlFor="email"
     placeholder='Email'
-    className='block text-sm font-medium text-gray-700'
+    className='block text-sm font-medium text-white'
     >Email</label>
     <div className="mt-2 flex gap-4">
         <input

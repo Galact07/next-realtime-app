@@ -2,6 +2,8 @@ import {NextAuthOptions} from 'next-auth'
 import { UpstashRedisAdapter } from '@next-auth/upstash-redis-adapter'
 import { db } from '@/lib/db'
 import GoogleProvider from "next-auth/providers/google";
+import FacebookProvider from "next-auth/providers/facebook";
+import TwitterProvider from "next-auth/providers/twitter";
 import { User } from '@/interfaces/User';
 import { fetchRedis } from '@/helpers/redis';
 
@@ -17,6 +19,14 @@ export const authOptions:NextAuthOptions = {
         GoogleProvider({
           clientId: process.env.GOOGLE_CLIENT_ID!,
           clientSecret: process.env.GOOGLE_SECRET!,
+        }),
+        FacebookProvider({
+          clientId: process.env.FACEBOOK_CLIENT_ID!,
+          clientSecret: process.env.FACEBOOK_SECRET!,
+        }),
+        TwitterProvider({
+          clientId: process.env.TWITTER_CLIENT_ID!,
+          clientSecret: process.env.TWITTER_SECRET!,
         }),
     ],
     callbacks: {
@@ -60,5 +70,7 @@ export const authOptions:NextAuthOptions = {
 
 }
     
+
+
 
 
