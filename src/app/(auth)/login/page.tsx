@@ -81,7 +81,7 @@ const Login: FC<pageProps> = ({}) => {
                     isLoading={isLoading}
                     >Google
                 </Button> 
-                <Button
+                {/* <Button
                     className='max-w-sm mx-auto w-full'
                     onClick={loginWithFacebook}
                     type="submit"
@@ -94,7 +94,7 @@ const Login: FC<pageProps> = ({}) => {
                     type="submit"
                     isLoading={isLoadingTweet}
                     >Twitter
-                </Button> 
+                </Button>  */}
                 </div>
         </div>
     </div>
